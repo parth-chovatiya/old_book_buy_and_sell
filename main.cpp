@@ -51,13 +51,12 @@ public:
         cout<<my_print(book_id,7)<<" | "<<my_print(book_isbn_number,16)<<" | "<<my_print(book_page,9)<<" | "<<my_print(book_edition,12)<<" | "<<my_print(book_name,25)<<" | "<<my_print(publisher_name,25)<<" | "<<my_print(book_price,10)<<" |"<<endl;
     }
 };
-// class buy : public sell
-// {
-// public:
-//     void display_data(){
-//         cout<<book_isbn_number<<book_page<<book_edition<<book_name<<publisher_name<<book_price<<endl;
-//     }
-// };
+class buy : public sell
+{
+
+public:
+    void delete_book(int);
+};
 string center(const string s, const int w){
     stringstream ss,spaces;
     int padding = w - s.size();
@@ -68,6 +67,44 @@ string center(const string s, const int w){
         ss<<" ";
     return ss.str();
 }
+void buy :: delete_book(int rno)
+{
+    int pos,flag=0;
+    ifstream ifs;
+    ifs.open("Books_information.txt",ios::in);
+
+    ofstream ofs;
+    ofs.open("temp.txt",ios::out);
+    // int c;
+    // int line_no = 1;
+    while(!ifs.eof()){
+    //     if(c=='\n')
+    //         line_no++;
+    //     if(line_no!=n)
+        ifs.read((char*)this,sizeof(buy));
+        if(ifs){
+            if(rno==book_id){
+                flag=1;
+            }
+        }
+        else{
+            ofs.write((char*)this,sizeof(buy));
+        }
+    }
+    ofs.close();
+    ifs.close();
+    remove("Books_information.txt");
+    rename("temp.txt","Book_information.txt");
+    // }
+    // string line;
+    // ifstream myfile;
+    // ofstream temp;
+    // myfile.open("Books_information.txt",ios::in);
+    // temp.open("temp.txt",ios::out);
+    // while(getline(myfile,line)){
+    //     if(line!=rno)
+    // }
+}
 int main()
 {
     cout<<"Welcome to online book store\n\n";
@@ -76,6 +113,7 @@ int main()
     int c;
     cout<<"Enter choice : ";    cin>>c;
     sell s;
+    buy b;
     fstream inout;
     inout.open("Books_information.txt",ios::in|ios::out|ios::ate);
     
@@ -102,5 +140,13 @@ int main()
     inout.seekg(0,ios::beg);
     while(inout.read((char*)&s,sizeof(s)))
         s.display_data();
+    
+    // cout<<"Which Book You want to buy ? \n";
+    // cout<<"Enter Book id number : ";
+    // int pos,up;    cin>>pos;
+    // up = (pos-1)*sizeof(sell);
+    // inout.seekp(up,ios::beg);
+    // inout.read((char*)&b,sizeof(buy));
+    // b.delete_book(pos);
     }
 }
