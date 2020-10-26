@@ -68,12 +68,12 @@ public:
 ///  ---  to get data from user  ---
     void getBookData()
     {
-        cout<<"Enter Book ISBN number : ";  cin>>book_isbn_number; cin.ignore();
-        cout<<"Enter book name : ";         cin.getline(book_name,50); //cin.ignore();
-        cout<<"Enter publisher_name : ";    cin.getline(publisher_name,50);// cin.ignore();
-        cout<<"Enter book price : ";    cin>>book_price;
-        cout<<"Enter book page : ";     cin>>book_page; 
-        cout<<"Enter book edition : ";  cin>>book_edition; 
+        cout<<"\t\tEnter Book ISBN number : ";  cin>>book_isbn_number; cin.ignore();
+        cout<<"\t\tEnter book name : ";         cin.getline(book_name,50); //cin.ignore();
+        cout<<"\t\tEnter publisher_name : ";    cin.getline(publisher_name,50);// cin.ignore();
+        cout<<"\t\tEnter book price : ";    cin>>book_price;
+        cout<<"\t\tEnter book page : ";     cin>>book_page; 
+        cout<<"\t\tEnter book edition : ";  cin>>book_edition; 
     }
     void showBookData()
     {
@@ -97,7 +97,7 @@ int Book :: storeBook()
     }
     else{
         ofstream fout;
-        fout.open("file12.dat",ios::app|ios::binary);
+        fout.open("books.dat",ios::app|ios::binary);
         fout.write((char*)this,sizeof(*this));
         fout.close();
         return(1);
@@ -109,7 +109,7 @@ int Book :: storeBook()
 void Book :: viewAllbooks()
     {
         ifstream fin;
-        fin.open("file12.dat",ios::in|ios::binary);
+        fin.open("books.dat",ios::in|ios::binary);
         fin.read((char*)this,sizeof(*this));
         while(!fin.eof()){
             showBookData();
@@ -124,8 +124,8 @@ void Book :: delete_book(const char *t)
 {
     ifstream fin;
     ofstream fout;
-    fin.open("file12.dat",ios::in|ios::binary);
-    fout.open("file12_temp.dat",ios::out);
+    fin.open("books.dat",ios::in|ios::binary);
+    fout.open("books_temp.dat",ios::out);
     fin.read((char*)this,sizeof(*this));
     while(!fin.eof()){
         if(strcmp(book_name,t))
@@ -134,8 +134,8 @@ void Book :: delete_book(const char *t)
     }
     fin.close();
     fout.close();
-    remove("file12.dat");
-    rename("file12_temp.dat","file12.dat");
+    remove("books.dat");
+    rename("books_temp.dat","books.dat");
 }
 
 
@@ -144,7 +144,7 @@ int Book :: search_book(const char *t)
 {
     int flag=0;
     ifstream fin;
-    fin.open("file12.dat",ios::in|ios::binary);
+    fin.open("books.dat",ios::in|ios::binary);
     fin.read((char*)this,sizeof(*this));
     while(!fin.eof()){
         if(!strcmp(t,book_name)){
@@ -166,7 +166,7 @@ void Book :: generate_bill()
         ofstream fout;
         time_t current = time(0);
         char* dt = ctime(&current);
-        fout.open("file12_bill.txt",ios::out);
+        fout.open("bill.txt",ios::out);
         fout<<"\t\t\t\tBook Bill\n";
         fout<<"\t\t\t\t---------\n\n";
         fout<<"Date : "<<dt<<"\n";
@@ -234,7 +234,7 @@ while(1){
                 cout<<"\n\t\tYou want bill? y/n : ";  cin>>c;
                 if(c=='y'){
                     b.generate_bill();
-                    cout<<"\n\t\tYour bill is stored in : "<<get_current_dir()<<"\\file12_bill.txt\n";
+                    cout<<"\n\t\tYour bill is stored in : "<<get_current_dir()<<"\\bill.txt\n";
                     b.delete_book(s);
                 }
                 else{
@@ -260,9 +260,5 @@ while(1){
             cout<<"\t\tEnter valid choice\n";
             break;
     }
-}    
-    
-    // cout<<center("book_id",7)<<" | "<<center("book_isbn_number",16)<<" | "<<center("book_page",9)<<" | "<<center("book_edition",12)<<" | "<<center("book_name",25)<<" | "<<center("publisher_name",25)<<" | "<<center("book_price",10)<<" |\n ";
-    // cout<<string(20*7 + 2*3, '-')<<"\n";
-    // b.viewAllbooks();
+}
 }
