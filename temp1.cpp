@@ -2,6 +2,8 @@
 #include<fstream>
 #include<cstring>
 #include<ctime>
+#include<direct.h>
+#include<unistd.h>
 #include<bits/stdc++.h>
 using namespace std;
 int book_id=0;
@@ -35,6 +37,16 @@ string center(const string s, const int w){
     return ss.str();
 }
 
+
+//   ------   to get current working directory
+string get_current_dir() {
+   char buff[FILENAME_MAX]; 
+   _getcwd( buff, FILENAME_MAX );
+   string current_working_dir(buff);
+   return current_working_dir;
+}
+
+///   ------ Book class ------   ///
 class Book
 {
     int book_isbn_number;
@@ -42,6 +54,8 @@ class Book
     float book_price;
     int book_page,book_edition;
 public:
+
+///  --- constructor which will initilaze default values
     Book(){
         book_isbn_number=0;
         strcpy(book_name,"no title");
@@ -50,6 +64,8 @@ public:
         book_page=0;
         book_edition=0;
     }
+
+///  ---  to get data from user  ---
     void getBookData()
     {
         cout<<"Enter Book ISBN number : ";  cin>>book_isbn_number; cin.ignore();
@@ -70,6 +86,9 @@ public:
     int search_book(const char *);
     void generate_bill();
 };
+
+
+///   ------ store book in file   ------    ///
 int Book :: storeBook()
 {
     if(book_isbn_number==0&&book_price==0){
@@ -84,6 +103,9 @@ int Book :: storeBook()
         return(1);
     }
 }
+
+
+///   ------   show all books from file   ------   ///
 void Book :: viewAllbooks()
     {
         ifstream fin;
@@ -95,6 +117,9 @@ void Book :: viewAllbooks()
         }
         fin.close();
     }
+
+
+///   ------   delete book from file whose name is stored in variable t   ------   ///
 void Book :: delete_book(const char *t)
 {
     ifstream fin;
@@ -112,6 +137,9 @@ void Book :: delete_book(const char *t)
     remove("file12.dat");
     rename("file12_temp.dat","file12.dat");
 }
+
+
+///   ------   search book from file whose name is stored in variable t   ------   ///
 int Book :: search_book(const char *t)
 {
     int flag=0;
@@ -128,10 +156,13 @@ int Book :: search_book(const char *t)
     fin.close();
     return flag;
 }
+
+
+///   ------   generate bill and stored in septate text file   ------   ///
 void Book :: generate_bill()
 {
         string name;
-        cout<<"Enter your name : "; cin>>name;
+        cout<<"\n\t\tEnter your name : "; cin>>name;
         ofstream fout;
         time_t current = time(0);
         char* dt = ctime(&current);
@@ -153,6 +184,9 @@ void Book :: generate_bill()
         fout<<"-----------------------\n";
         fout<<"Total Price   : "<<book_price+book_price*0.05;
         fout<<"\n\n\n";
+
+        ///  --- terms and condition ---
+
         fout<<"---: Terms & Conditions :---\n\n";
         fout<<"1. You can replace your order withon 7 working days\n";
         fout<<"2. This bill is very important when you replace order\n";
@@ -161,16 +195,24 @@ void Book :: generate_bill()
         fout<<"\n\n\t\t Thank You ...";
         fout<<"\n\t\t visit again ...\n";
 }
+
+
+
+
+///// -------  main  ---------
 int main()
 {
     Book b;
+while(1){
+    cout<<"\n\t\tWelcome to online book store\n\n";
+    cout<<"\t\t1. For sell Book\n";
+    cout<<"\t\t2. For buy Book\n";
+    cout<<"\t\t3. Show all books\n";
+    cout<<"\t\t4. Exit\n\n";
 
-    cout<<"Welcome to online book store\n\n";
-    cout<<"1. For sell Book\n";
-    cout<<"2. For buy Book\n";
-    cout<<"3. Exit\n";
     int c;
-    cout<<"Enter choice : ";    cin>>c;
+    cout<<"\n\t\tEnter choice : ";    cin>>c;
+    cout<<"\n";
     switch(c){
         case 1:
             b.getBookData();
@@ -183,37 +225,44 @@ int main()
         
             b.viewAllbooks();
             char s[50];
-            cout<<"Which book you want to purchase? \n";
-            cout<<"Enter Book name : ";
+            cout<<"\n\t\tWhich book you want to purchase? \n";
+            cout<<"\n\t\tEnter Book name : ";
             cin>>s;
             if(b.search_book(s)==1){
-                cout<<"You have successfully purchase book\n";
+                cout<<"\n\t\tYou have successfully purchased book\n";
                 char c;
-                cout<<"You want bill? y/n : ";  cin>>c;
+                cout<<"\n\t\tYou want bill? y/n : ";  cin>>c;
                 if(c=='y'){
                     b.generate_bill();
+                    cout<<"\n\t\tYour bill is stored in : "<<get_current_dir()<<"\\file12_bill.txt\n";
                     b.delete_book(s);
                 }
                 else{
-                    cout<<"Thank You ..\n";
+                    cout<<"\t\t\tThank You ..\n";
                 }
             }
             else{
-                cout<<"Book not found\n";
+                cout<<"\n\t\tBook not found\n";
             }
             cout<<endl;
             break;
         case 3:
-            cout<<"Thank You ...\n";
+            cout<<center("book_id",7)<<" | "<<center("book_isbn_number",16)<<" | "<<center("book_page",9)<<" | "<<center("book_edition",12)<<" | "<<center("book_name",25)<<" | "<<center("publisher_name",25)<<" | "<<center("book_price",10)<<" |\n ";
+        
+            cout<<string(20*7 + 2*3, '-')<<"\n";
+            b.viewAllbooks();
+            break;
+        case 4:
+            cout<<"\n\t\tThank You ...\n";
             exit(0);
             break;
         default:
-            cout<<"Enter valid choice\n";
+            cout<<"\t\tEnter valid choice\n";
             break;
     }
+}    
     
-    
-    cout<<center("book_id",7)<<" | "<<center("book_isbn_number",16)<<" | "<<center("book_page",9)<<" | "<<center("book_edition",12)<<" | "<<center("book_name",25)<<" | "<<center("publisher_name",25)<<" | "<<center("book_price",10)<<" |\n ";
-    cout<<string(20*7 + 2*3, '-')<<"\n";
-    b.viewAllbooks();
+    // cout<<center("book_id",7)<<" | "<<center("book_isbn_number",16)<<" | "<<center("book_page",9)<<" | "<<center("book_edition",12)<<" | "<<center("book_name",25)<<" | "<<center("publisher_name",25)<<" | "<<center("book_price",10)<<" |\n ";
+    // cout<<string(20*7 + 2*3, '-')<<"\n";
+    // b.viewAllbooks();
 }
