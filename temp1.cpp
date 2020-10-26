@@ -158,7 +158,7 @@ int Book :: search_book(const char *t)
 }
 
 
-///   ------   generate bill and stored in septate text file   ------   ///
+///   ------   generate bill and stored in seprate text file   ------   ///
 void Book :: generate_bill()
 {
         string name;
