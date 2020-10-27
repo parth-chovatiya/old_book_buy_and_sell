@@ -11,8 +11,8 @@ string my_print(const int s,const int width)
 {
     stringstream ss;
     ss<<fixed<<right;
-    ss.fill(' ');
-    ss.width(width);
+    ss.fill(' ');       // fill space around displayed
+    ss.width(width);    // set width around displayed
     ss<<s;
     return ss.str();
 }
@@ -31,8 +31,8 @@ string center(const string s, const int w){
     int padding = w - s.size();
     for(int i=0; i<padding/2; ++i)
         spaces<<" ";
-    ss<<spaces.str()<<s<<spaces.str();
-    if(padding>0&&padding%2!=0)
+    ss<<spaces.str()<<s<<spaces.str();  // format with padding
+    if(padding>0&&padding%2!=0)         // if odd, add 1 space
         ss<<" ";
     return ss.str();
 }
@@ -222,7 +222,7 @@ while(1){
             cout<<center("book_id",7)<<" | "<<center("book_isbn_number",16)<<" | "<<center("book_page",9)<<" | "<<center("book_edition",12)<<" | "<<center("book_name",25)<<" | "<<center("publisher_name",25)<<" | "<<center("book_price",10)<<" |\n ";
         
             cout<<string(20*7 + 2*3, '-')<<"\n";
-        
+            book_id=0;
             b.viewAllbooks();
             char s[50];
             cout<<"\n\t\tWhich book you want to purchase? \n";
@@ -238,6 +238,7 @@ while(1){
                     b.delete_book(s);
                 }
                 else{
+                    cout<<"\t\tBook is not found \n";
                     cout<<"\t\t\tThank You ..\n";
                 }
             }
@@ -250,6 +251,7 @@ while(1){
             cout<<center("book_id",7)<<" | "<<center("book_isbn_number",16)<<" | "<<center("book_page",9)<<" | "<<center("book_edition",12)<<" | "<<center("book_name",25)<<" | "<<center("publisher_name",25)<<" | "<<center("book_price",10)<<" |\n ";
         
             cout<<string(20*7 + 2*3, '-')<<"\n";
+            book_id=0;
             b.viewAllbooks();
             break;
         case 4:
@@ -260,5 +262,6 @@ while(1){
             cout<<"\t\tEnter valid choice\n";
             break;
     }
-}
+}    
+    return 1;
 }
